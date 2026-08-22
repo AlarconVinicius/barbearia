@@ -21,6 +21,7 @@ Pode:
 
 - consultar os agendamentos da barbearia;
 - criar agendamentos para clientes;
+- criar agendamentos para si usando sua própria conta como cliente, desde que não seja também o profissional do mesmo agendamento;
 - alterar e cancelar agendamentos;
 - consultar e alterar o próprio perfil;
 - alterar os próprios dados profissionais que forem explicitamente permitidos.
@@ -84,6 +85,9 @@ Pode:
 - Autenticação não implica autorização.
 - O identificador do cliente será obtido da identidade autenticada, e não aceito livremente no corpo da requisição.
 - Toda consulta de cliente deverá limitar o resultado ao usuário autenticado, salvo quando realizada por funcionário autorizado.
-- Funções gerais serão representadas por roles, mas regras como “somente o próprio agendamento” serão verificadas sobre o recurso acessado.
+- Funções gerais serão representadas por papéis associados ao usuário, mas regras como “somente o próprio agendamento” serão verificadas sobre o recurso acessado.
+- Usuários são armazenados em uma única entidade `User`; suas capacidades são determinadas por `UserRole`.
+- Um usuário com papel `Employee` pode aparecer como profissional ou como cliente de um agendamento, mas não pode ocupar os dois lados do mesmo agendamento.
+- Um usuário que possua somente o papel `Customer` pode aparecer apenas como cliente.
 - Exclusões relevantes deverão ser lógicas quando houver histórico associado.
 

@@ -4,7 +4,21 @@
 
 ### RF01 — Autenticação
 
-O sistema deve permitir registro, login, logout, confirmação de e-mail e recuperação de senha usando ASP.NET Core Identity.
+O sistema deve implementar autenticação própria e permitir registro e login sem senha usando o e-mail e um código de confirmação enviado por e-mail.
+
+No registro, o cliente deve informar nome completo, telefone e e-mail. O e-mail será usado como identificador de acesso.
+
+O código de confirmação deve:
+
+- conter exatamente seis dígitos;
+- expirar cinco minutos após sua emissão;
+- permitir no máximo três tentativas de validação;
+- ser válido para um único uso;
+- ser armazenado de forma segura, sem persistência do valor em texto puro.
+
+Após três tentativas incorretas, novas validações e emissões de código para o usuário devem ficar bloqueadas por três minutos. Encerrado o bloqueio, um novo código poderá ser solicitado.
+
+Após uma validação bem-sucedida, o sistema deve confirmar o e-mail no primeiro acesso ou autenticar o usuário nos acessos seguintes e emitir a credencial de sessão correspondente.
 
 ### RF02 — Autorização
 
@@ -17,6 +31,8 @@ O administrador deve poder cadastrar, consultar, alterar, ativar e desativar fun
 ### RF04 — Autogestão do funcionário
 
 O funcionário deve poder consultar e alterar os campos autorizados de seu próprio perfil.
+
+Um funcionário deve poder criar um agendamento para si próprio, desde que outro funcionário seja o profissional responsável pelo atendimento.
 
 ### RF05 — Serviços
 
@@ -123,7 +139,7 @@ O reenvio da mesma solicitação ou mensagem não deve criar agendamentos ou efe
 
 ### RNF04 — Segurança
 
-Senhas devem ser gerenciadas pelo Identity, dados privados não devem aparecer em logs e todo acesso deve respeitar as permissões documentadas.
+O sistema não deve armazenar senhas. Códigos de confirmação devem ser aleatórios, temporários, persistidos somente de forma protegida e nunca registrados em logs. A emissão e a validação devem possuir limitação de frequência. Dados privados não devem aparecer em logs e todo acesso deve respeitar as permissões documentadas.
 
 ### RNF05 — Auditabilidade
 

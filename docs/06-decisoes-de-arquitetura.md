@@ -10,7 +10,7 @@ Tecnologias planejadas:
 
 - .NET;
 - ASP.NET Core;
-- ASP.NET Core Identity;
+- autenticação e autorização próprias sobre ASP.NET Core;
 - PostgreSQL;
 - Entity Framework Core;
 - RabbitMQ;
@@ -132,4 +132,26 @@ Os detalhes de GitHub Actions, Docker para produção, ECR, ECS, RDS e infraestr
 **Estado:** planejada para a fase de implementação.
 
 Testes de PostgreSQL, concorrência e RabbitMQ serão detalhados junto à implementação correspondente. O critério mínimo de concorrência será provar que várias tentativas simultâneas pelo mesmo intervalo produzem apenas uma confirmação.
+
+## DA12 — Autenticação sem senha
+
+**Estado:** aceita.
+
+O sistema utilizará autenticação passwordless por e-mail. O usuário informará o e-mail e receberá um código numérico de seis dígitos, válido por cinco minutos, para uso único e com no máximo três tentativas de validação. Ao atingir o limite, o código será invalidado e o usuário ficará impedido de validar ou solicitar outro código por três minutos.
+
+A aplicação será responsável pela identidade, papéis, confirmação do e-mail e emissão da credencial de acesso. O ASP.NET Core Identity não será utilizado e não haverá cadastro, validação ou recuperação de senha.
+
+O código será persistido somente de forma protegida. A implementação também aplicará invalidação de códigos anteriores, limitação de frequência e respostas que reduzam o risco de enumeração de usuários.
+
+O formato e o ciclo de vida da credencial emitida após a validação do código serão definidos antes da implementação da camada de autenticação.
+
+## DA13 — Usuário único e autorização por papel
+
+**Estado:** aceita.
+
+Clientes, funcionários e administradores serão armazenados em uma única entidade `User`. A associação `UserRole` determinará as operações permitidas para cada usuário, eliminando as tabelas separadas `ApplicationUser`, `Customer` e `Employee`.
+
+Um usuário com papel `Employee` poderá ser profissional em alguns agendamentos e cliente em outros, sem precisar receber também o papel `Customer`. Entretanto, ele não poderá ser simultaneamente cliente e profissional no mesmo agendamento. Um usuário que possua somente o papel `Customer` nunca poderá ocupar o campo de profissional.
+
+O CPF será uma propriedade opcional de `User` no banco de dados, mas será obrigatório pela regra de domínio sempre que o usuário possuir o papel `Employee`. A unicidade será aplicada aos CPFs preenchidos.
 

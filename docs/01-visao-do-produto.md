@@ -26,7 +26,7 @@ Disponibilizar uma API confiável para cadastrar serviços e funcionários, cons
 
 ## Escopo inicial
 
-- cadastro e autenticação de usuários;
+- cadastro de clientes e autenticação própria, sem senha, por código enviado por e-mail;
 - administração de funcionários;
 - cadastro de serviços, preços e durações;
 - configuração de horários de trabalho dos funcionários;

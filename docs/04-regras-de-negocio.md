@@ -53,3 +53,24 @@
 - **RN31:** a publicação no RabbitMQ pode ocorrer mais de uma vez; consumidores devem ser idempotentes.
 - **RN32:** uma chave de idempotência repetida deve devolver o resultado já conhecido, sem criar uma nova solicitação.
 
+## Cadastro e autenticação
+
+- **RN33:** o registro de cliente exige nome completo, telefone e e-mail.
+- **RN34:** o e-mail normalizado deve ser único e será o identificador usado no login.
+- **RN35:** o login não utilizará senha; um código de confirmação será enviado ao e-mail informado.
+- **RN36:** o código deve conter exatamente seis dígitos e expirar cinco minutos após sua emissão.
+- **RN37:** o código deve ser invalidado após uma validação bem-sucedida e não pode ser reutilizado.
+- **RN38:** cada código permite no máximo três tentativas de validação. Ao atingir o limite, ele deve ser invalidado e novas validações e emissões para o usuário devem ser bloqueadas por três minutos.
+- **RN39:** a emissão de um novo código deve invalidar qualquer código anterior ainda ativo para o mesmo usuário e propósito.
+- **RN40:** o código não pode ser persistido nem registrado em logs em texto puro.
+- **RN41:** respostas de solicitação de código não devem revelar desnecessariamente se um e-mail está cadastrado.
+- **RN42:** solicitações e tentativas de validação devem possuir limitação de frequência por e-mail e origem da requisição.
+- **RN43:** o primeiro código validado após o registro confirma o endereço de e-mail; códigos posteriores autenticam o usuário.
+- **RN44:** encerrados os três minutos de bloqueio, o usuário pode solicitar um novo código; o código que atingiu o limite de tentativas permanece inválido.
+- **RN45:** usuários clientes, funcionários e administradores serão armazenados na entidade única `User`, e suas capacidades serão determinadas por `UserRole`.
+- **RN46:** `EmployeeId` deve referenciar um usuário ativo com papel `Employee`.
+- **RN47:** `CustomerId` deve referenciar um usuário ativo com papel `Customer` ou `Employee`.
+- **RN48:** um usuário com papel `Customer`, mas sem papel `Employee`, não pode ser o profissional de um agendamento.
+- **RN49:** um usuário com papel `Employee` pode ser o cliente ou o profissional de um agendamento, mas `CustomerId` e `EmployeeId` não podem ter o mesmo valor no mesmo agendamento.
+- **RN50:** `Cpf` é obrigatório e único para usuários com papel `Employee`; para os demais usuários, é opcional.
+

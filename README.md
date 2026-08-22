@@ -12,6 +12,7 @@ Neste momento, o repositório contém somente documentação. Nenhuma decisão d
 4. [Regras de negócio](docs/04-regras-de-negocio.md)
 5. [Casos de uso](docs/05-casos-de-uso.md)
 6. [Decisões de arquitetura](docs/06-decisoes-de-arquitetura.md)
+7. [Entidades e propriedades](docs/07-entidades-e-propriedades.md)
 
 ## Estado atual
 
@@ -20,5 +21,6 @@ Neste momento, o repositório contém somente documentação. Nenhuma decisão d
 - Requisitos funcionais e não funcionais iniciais definidos.
 - Casos de uso principais descritos.
 - Estratégia de concorrência e uso do RabbitMQ registrada como decisão proposta.
+- Modelo inicial de entidades, propriedades e relacionamentos documentado.
 - CI/CD, AWS e envio real de notificações foram adiados para etapas futuras.
 

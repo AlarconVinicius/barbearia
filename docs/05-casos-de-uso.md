@@ -1,5 +1,43 @@
 # Casos de uso
 
+## UC00 — Registrar cliente
+
+**Ator:** Visitante.
+
+### Fluxo principal
+
+1. Visitante informa nome completo, telefone e e-mail.
+2. Sistema valida e normaliza os dados.
+3. Sistema cria `User` e atribui o papel `Customer`.
+4. Sistema gera um código de seis dígitos, armazena somente sua representação protegida e define a expiração para cinco minutos.
+5. Sistema envia o código ao e-mail informado.
+6. Visitante informa o código recebido.
+7. Sistema valida prazo, quantidade de tentativas e correspondência do código.
+8. Sistema marca o código como utilizado, confirma o e-mail e emite a credencial de acesso.
+
+### Alternativas
+
+- Código incorreto: sistema registra uma tentativa e informa que o código é inválido.
+- Terceira tentativa incorreta: sistema invalida o código e bloqueia novas validações e emissões para o usuário por três minutos.
+- Código expirado ou utilizado: sistema rejeita a validação e exige um novo código.
+- Novo código solicitado: sistema invalida qualquer código anterior ainda ativo para o mesmo propósito.
+- Bloqueio encerrado: após três minutos, o visitante pode solicitar um novo código.
+
+## UC00A — Entrar com código por e-mail
+
+**Ator:** Usuário cadastrado.
+
+1. Usuário informa seu e-mail.
+2. Sistema aplica as limitações de frequência e, quando permitido, gera um código de seis dígitos válido por cinco minutos.
+3. Sistema armazena somente a representação protegida do código e o envia por e-mail.
+4. Usuário informa o código recebido.
+5. Sistema permite até três tentativas dentro do prazo de validade.
+6. Em caso de sucesso, sistema invalida o código e emite a credencial de acesso.
+
+Após a terceira tentativa incorreta, o código é invalidado e novas validações e emissões ficam bloqueadas por três minutos. Depois desse período, o usuário pode solicitar um novo código.
+
+As respostas não devem permitir enumeração desnecessária de e-mails cadastrados.
+
 ## UC01 — Cadastrar funcionário
 
 **Ator:** Administrador.
@@ -11,7 +49,7 @@
 1. Administrador informa os dados do funcionário.
 2. Administrador seleciona os serviços que ele executa.
 3. Sistema valida os dados e a unicidade necessária.
-4. Sistema cria o perfil profissional.
+4. Sistema cria ou atualiza o usuário e atribui o papel `Employee`.
 5. Sistema registra a operação.
 
 ### Alternativas
@@ -119,6 +157,14 @@ Se a chave de idempotência já existir, o sistema retorna o estado conhecido da
 3. Cria, altera ou cancela conforme a operação.
 4. Sistema verifica a role e a regra do recurso.
 5. Sistema valida e registra a operação.
+
+### Alternativa — Funcionário agenda para si
+
+1. Funcionário escolhe criar um agendamento para si próprio.
+2. Sistema usa o próprio `User` do funcionário como `CustomerId`.
+3. Sistema exige que o profissional selecionado seja outro usuário com papel `Employee`.
+4. Sistema rejeita a solicitação se `CustomerId` e `EmployeeId` forem iguais.
+5. As mesmas validações de disponibilidade e concorrência do fluxo comum são aplicadas.
 
 ## UC08 — Cancelar agendamento
 
