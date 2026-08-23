@@ -6,6 +6,15 @@
 
 Será utilizado um monólito modular ASP.NET Core para a API, acompanhado de um Worker quando houver processamento assíncrono.
 
+A solução inicial será organizada em quatro projetos de produção:
+
+- `BarberFlow.Api`: camada de apresentação HTTP e ponto de composição da API;
+- `BarberFlow.Domain`: entidades, regras, casos de uso, abstrações e contratos internos de mensagens;
+- `BarberFlow.Infrastructure`: implementações de persistência, autenticação, mensageria, e-mail e demais integrações;
+- `BarberFlow.Worker`: consumidores e tarefas em segundo plano, além do ponto de composição do processamento assíncrono.
+
+Não haverá um projeto `Shared` inicialmente. API e Worker compartilharão os contratos internos por meio de `BarberFlow.Domain`. Caso esses contratos precisem ser distribuídos para sistemas externos ou versionados separadamente, essa decisão será reavaliada.
+
 Tecnologias planejadas:
 
 - .NET;
@@ -154,4 +163,51 @@ Clientes, funcionários e administradores serão armazenados em uma única entid
 Um usuário com papel `Employee` poderá ser profissional em alguns agendamentos e cliente em outros, sem precisar receber também o papel `Customer`. Entretanto, ele não poderá ser simultaneamente cliente e profissional no mesmo agendamento. Um usuário que possua somente o papel `Customer` nunca poderá ocupar o campo de profissional.
 
 O CPF será uma propriedade opcional de `User` no banco de dados, mas será obrigatório pela regra de domínio sempre que o usuário possuir o papel `Employee`. A unicidade será aplicada aos CPFs preenchidos.
+
+## DA14 — Estrutura da solution e dependências
+
+**Estado:** aceita.
+
+A solution seguirá uma versão simplificada de Clean Architecture com três responsabilidades principais e dois pontos de entrada:
+
+- Presentation, representada por `BarberFlow.Api`;
+- Domain, representada por `BarberFlow.Domain`;
+- Infrastructure, representada por `BarberFlow.Infrastructure`;
+- processamento assíncrono, representado por `BarberFlow.Worker`.
+
+### Direção das dependências
+
+`BarberFlow.Domain` não referencia nenhum outro projeto da solution.
+
+`BarberFlow.Infrastructure` referencia `BarberFlow.Domain` para implementar as abstrações definidas pelo núcleo.
+
+`BarberFlow.Api` referencia `BarberFlow.Domain` para executar casos de uso e `BarberFlow.Infrastructure` para registrar as implementações no container de injeção de dependência.
+
+`BarberFlow.Worker` referencia `BarberFlow.Domain` para executar casos de uso e consumir contratos internos, além de `BarberFlow.Infrastructure` para registrar persistência e mensageria.
+
+```text
+BarberFlow.Api ───────────> BarberFlow.Domain
+       └─────────────────> BarberFlow.Infrastructure ──> BarberFlow.Domain
+
+BarberFlow.Worker ────────> BarberFlow.Domain
+       └─────────────────> BarberFlow.Infrastructure ──> BarberFlow.Domain
+```
+
+O domínio não conhecerá ASP.NET Core, Entity Framework Core, PostgreSQL ou RabbitMQ. As abstrações necessárias serão declaradas no domínio e implementadas na infraestrutura.
+
+### Organização física inicial
+
+```text
+src/backend/
+├── BarberFlow.slnx
+├── core/
+│   └── BarberFlow.Domain/
+├── infrastructure/
+│   └── BarberFlow.Infrastructure/
+└── services/
+    ├── BarberFlow.Api/
+    └── BarberFlow.Worker/
+```
+
+Dentro da API, os endpoints serão agrupados por funcionalidade. No domínio, entidades, abstrações, casos de uso e mensagens serão separados por responsabilidade. Na infraestrutura ficarão persistência, autenticação, mensageria, e-mail e implementações técnicas. O Worker conterá consumidores, jobs e sua configuração de host.
 
