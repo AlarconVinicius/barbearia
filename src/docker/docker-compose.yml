@@ -1,7 +1,8 @@
+name: barberflow
+
 services:
   postgres:
     image: postgres:16
-    container_name: barberflow-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -22,7 +23,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:4-management
-    container_name: barberflow-rabbitmq
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -45,7 +45,6 @@ services:
 
   portainer:
     image: portainer/portainer-ce:lts
-    container_name: barberflow-portainer
     restart: unless-stopped
     ports:
       - "9443:9443"

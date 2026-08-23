@@ -19,12 +19,12 @@ docker compose version
 
 ## Serviços
 
-| Serviço | Imagem | Porta | Finalidade |
-|---|---|---:|---|
-| PostgreSQL | `postgres:16` | `5432` | Persistência da aplicação |
-| RabbitMQ | `rabbitmq:4-management` | `5672` | Mensageria da API e do Worker |
-| RabbitMQ Management | `rabbitmq:4-management` | `15672` | Interface administrativa do broker |
-| Portainer CE | `portainer/portainer-ce:lts` | `9443` | Administração visual do ambiente Docker |
+| Serviço             | Imagem                       |   Porta | Finalidade                              |
+| ------------------- | ---------------------------- | ------: | --------------------------------------- |
+| PostgreSQL          | `postgres:16`                |  `5432` | Persistência da aplicação               |
+| RabbitMQ            | `rabbitmq:4-management`      |  `5672` | Mensageria da API e do Worker           |
+| RabbitMQ Management | `rabbitmq:4-management`      | `15672` | Interface administrativa do broker      |
+| Portainer CE        | `portainer/portainer-ce:lts` |  `9443` | Administração visual do ambiente Docker |
 
 Os dados são mantidos nos volumes Docker `postgres_data`, `rabbitmq_data` e `portainer_data`.
 
@@ -72,7 +72,7 @@ Consulte o estado:
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml ps
 ```
 
-Os containers `barberflow-postgres` e `barberflow-rabbitmq` devem alcançar o estado `healthy`. Durante a inicialização, eles podem permanecer temporariamente como `starting`. O container `barberflow-portainer` deve aparecer como `running`.
+Os serviços `postgres` e `rabbitmq` devem alcançar o estado `healthy`. Durante a inicialização, eles podem permanecer temporariamente como `starting`. O serviço `portainer` deve aparecer como `running`.
 
 ## Acessar os serviços
 
@@ -188,19 +188,19 @@ Use `Ctrl+C` para sair da visualização sem parar os containers.
 PostgreSQL:
 
 ```powershell
-docker exec barberflow-postgres pg_isready
+docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml exec postgres pg_isready
 ```
 
 RabbitMQ:
 
 ```powershell
-docker exec barberflow-rabbitmq rabbitmq-diagnostics -q ping
+docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml exec rabbitmq rabbitmq-diagnostics -q ping
 ```
 
 Portainer:
 
 ```powershell
-docker inspect --format "{{.State.Status}}" barberflow-portainer
+docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml ps portainer
 ```
 
 Resultados esperados:
@@ -254,9 +254,7 @@ Encerre ou reconfigure o serviço conflitante antes de iniciar o Compose.
 Consulte o estado detalhado e os logs:
 
 ```powershell
-docker inspect barberflow-postgres
-docker inspect barberflow-rabbitmq
-docker inspect barberflow-portainer
+docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml ps
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml logs
 ```
 
