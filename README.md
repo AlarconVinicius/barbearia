@@ -2,7 +2,7 @@
 
 Sistema de agendamento para barbearia desenvolvido em .NET.
 
-O repositório contém a estrutura inicial da API, do Worker, do domínio e da infraestrutura, além do ambiente local com PostgreSQL e RabbitMQ.
+O repositório contém a estrutura inicial da API, do Worker, do domínio e da infraestrutura, além do ambiente local com PostgreSQL, RabbitMQ e Portainer.
 
 ## Documentos
 
@@ -31,7 +31,7 @@ docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml p
 dotnet build .\src\backend\BarberFlow.slnx
 ```
 
-O PostgreSQL ficará disponível em `localhost:5432`, o RabbitMQ em `localhost:5672` e sua interface de administração em [http://localhost:15672](http://localhost:15672).
+O PostgreSQL ficará disponível em `localhost:5432`, o RabbitMQ em `localhost:5672`, sua interface de administração em [http://localhost:15672](http://localhost:15672) e o Portainer em [https://localhost:9443](https://localhost:9443).
 
 Consulte [Ambiente local](docs/08-ambiente-local.md) para configuração da aplicação, diagnóstico, logs e encerramento dos serviços.
 
@@ -44,6 +44,6 @@ Consulte [Ambiente local](docs/08-ambiente-local.md) para configuração da apli
 - Estratégia de concorrência e uso do RabbitMQ registrada como decisão proposta.
 - Modelo inicial de entidades, propriedades e relacionamentos documentado.
 - Solution inicial com API, Worker, Domain e Infrastructure criada.
-- PostgreSQL e RabbitMQ configurados para desenvolvimento local.
+- PostgreSQL, RabbitMQ e Portainer configurados para desenvolvimento local.
 - CI/CD, AWS e envio real de notificações foram adiados para etapas futuras.
 

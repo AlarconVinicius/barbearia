@@ -7,7 +7,7 @@ Este documento descreve como executar e diagnosticar as dependências locais do 
 - .NET SDK 10;
 - Docker Desktop em execução;
 - Docker Compose v2;
-- portas `5432`, `5672` e `15672` disponíveis.
+- portas `5432`, `5672`, `15672` e `9443` disponíveis.
 
 Verifique as instalações:
 
@@ -24,8 +24,9 @@ docker compose version
 | PostgreSQL | `postgres:16` | `5432` | Persistência da aplicação |
 | RabbitMQ | `rabbitmq:4-management` | `5672` | Mensageria da API e do Worker |
 | RabbitMQ Management | `rabbitmq:4-management` | `15672` | Interface administrativa do broker |
+| Portainer CE | `portainer/portainer-ce:lts` | `9443` | Administração visual do ambiente Docker |
 
-Os dados são mantidos nos volumes Docker `postgres_data` e `rabbitmq_data`.
+Os dados são mantidos nos volumes Docker `postgres_data`, `rabbitmq_data` e `portainer_data`.
 
 ## Configurar variáveis do Docker Compose
 
@@ -71,7 +72,7 @@ Consulte o estado:
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml ps
 ```
 
-Os containers `barberflow-postgres` e `barberflow-rabbitmq` devem alcançar o estado `healthy`. Durante a inicialização, eles podem permanecer temporariamente como `starting`.
+Os containers `barberflow-postgres` e `barberflow-rabbitmq` devem alcançar o estado `healthy`. Durante a inicialização, eles podem permanecer temporariamente como `starting`. O container `barberflow-portainer` deve aparecer como `running`.
 
 ## Acessar os serviços
 
@@ -95,6 +96,16 @@ Username: valor de RABBITMQ_DEFAULT_USER
 Password: valor de RABBITMQ_DEFAULT_PASS
 Virtual host: /
 ```
+
+### Portainer
+
+```text
+Management URL: https://localhost:9443
+```
+
+No primeiro acesso, o Portainer solicitará a criação do usuário administrador. O certificado HTTPS inicial é autoassinado, portanto o navegador poderá exibir um aviso de segurança no ambiente local.
+
+O Portainer acessa o Docker pelo socket `/var/run/docker.sock`. Esse acesso permite administrar containers, imagens, redes e volumes do host; por isso, esta configuração deve ser usada somente no ambiente local de desenvolvimento.
 
 ## Configurar a API e o Worker
 
@@ -164,6 +175,12 @@ Somente RabbitMQ:
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml logs --follow rabbitmq
 ```
 
+Somente Portainer:
+
+```powershell
+docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml logs --follow portainer
+```
+
 Use `Ctrl+C` para sair da visualização sem parar os containers.
 
 ## Verificar a saúde manualmente
@@ -180,11 +197,18 @@ RabbitMQ:
 docker exec barberflow-rabbitmq rabbitmq-diagnostics -q ping
 ```
 
+Portainer:
+
+```powershell
+docker inspect --format "{{.State.Status}}" barberflow-portainer
+```
+
 Resultados esperados:
 
 ```text
 PostgreSQL: accepting connections
 RabbitMQ: Ping succeeded
+Portainer: running
 ```
 
 ## Parar e remover os containers
@@ -205,7 +229,7 @@ Para iniciar novamente, execute `docker compose ... up -d`.
 
 ## Apagar os dados locais
 
-O comando abaixo remove os containers e também os volumes do PostgreSQL e RabbitMQ. Todos os dados locais serão apagados e não poderão ser recuperados pelos containers.
+O comando abaixo remove os containers e também os volumes do PostgreSQL, RabbitMQ e Portainer. Todos os dados locais, incluindo a configuração e o usuário administrador do Portainer, serão apagados e não poderão ser recuperados pelos containers.
 
 ```powershell
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml down --volumes
@@ -220,7 +244,7 @@ Use essa opção somente quando precisar recriar o ambiente do zero.
 Se uma porta estiver ocupada, identifique o processo no Windows:
 
 ```powershell
-Get-NetTCPConnection -LocalPort 5432,5672,15672 -ErrorAction SilentlyContinue
+Get-NetTCPConnection -LocalPort 5432,5672,15672,9443 -ErrorAction SilentlyContinue
 ```
 
 Encerre ou reconfigure o serviço conflitante antes de iniciar o Compose.
@@ -232,6 +256,7 @@ Consulte o estado detalhado e os logs:
 ```powershell
 docker inspect barberflow-postgres
 docker inspect barberflow-rabbitmq
+docker inspect barberflow-portainer
 docker compose --env-file .\src\docker\.env -f .\src\docker\docker-compose.yml logs
 ```
 
