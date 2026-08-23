@@ -3,5 +3,14 @@
     <File Path=".editorconfig" />
   </Folder>
 
-  <Project Path="./services/BarberFlow.Api/BarberFlow.Api.csproj" />
+  <Folder Name="/Core/">
+    <Project Path="core/BarberFlow.Domain/BarberFlow.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="infrastructure/BarberFlow.Infrastructure/BarberFlow.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="services/BarberFlow.Api/BarberFlow.Api.csproj" />
+    <Project Path="services/BarberFlow.Worker/BarberFlow.Worker.csproj" />
+  </Folder>
 </Solution>
