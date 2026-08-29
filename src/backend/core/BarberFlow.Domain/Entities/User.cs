@@ -1,4 +1,5 @@
 using BarberFlow.Domain.Common;
+using BarberFlow.Domain.ValueObjects;
 
 namespace BarberFlow.Domain.Entities;
 
@@ -10,38 +11,38 @@ public sealed class User : Entity
 
     public User(
         string fullName,
-        string email,
-        string phoneNumber,
-        string? cpf = null)
+        Email email,
+        PhoneNumber phoneNumber,
+        Cpf? cpf = null)
         : base()
     {
         FullName = DomainGuard.Required(fullName, nameof(fullName));
-        Email = DomainGuard.Required(email, nameof(email)).ToLowerInvariant();
-        PhoneNumber = DomainGuard.Required(phoneNumber, nameof(phoneNumber));
-        Cpf = string.IsNullOrWhiteSpace(cpf) ? null : cpf.Trim();
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+        Cpf = cpf;
         IsActive = true;
     }
 
     public string FullName { get; private set; } = null!;
 
-    public string Email { get; private set; } = null!;
+    public Email Email { get; private set; } = null!;
 
-    public string PhoneNumber { get; private set; } = null!;
+    public PhoneNumber PhoneNumber { get; private set; } = null!;
 
-    public string? Cpf { get; private set; }
+    public Cpf? Cpf { get; private set; }
 
     public bool IsActive { get; private set; }
 
     public void UpdateProfile(
         string fullName,
-        string email,
-        string phoneNumber,
-        string? cpf)
+        Email email,
+        PhoneNumber phoneNumber,
+        Cpf? cpf)
     {
         FullName = DomainGuard.Required(fullName, nameof(fullName));
-        Email = DomainGuard.Required(email, nameof(email)).ToLowerInvariant();
-        PhoneNumber = DomainGuard.Required(phoneNumber, nameof(phoneNumber));
-        Cpf = string.IsNullOrWhiteSpace(cpf) ? null : cpf.Trim();
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+        Cpf = cpf;
         MarkAsUpdated();
     }
 
