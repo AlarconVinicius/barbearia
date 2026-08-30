@@ -6,7 +6,7 @@
 
 ### Fluxo principal
 
-1. Visitante informa nome completo, telefone e e-mail.
+1. Visitante informa nome completo, CPF, telefone e e-mail.
 2. Sistema valida e normaliza os dados.
 3. Sistema cria `User` e atribui o papel `Customer`.
 4. Sistema gera um código de seis dígitos, armazena somente sua representação protegida e define a expiração para cinco minutos.

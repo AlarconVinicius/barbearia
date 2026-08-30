@@ -55,7 +55,7 @@
 
 ## Cadastro e autenticação
 
-- **RN33:** o registro de cliente exige nome completo, telefone e e-mail.
+- **RN33:** o registro de cliente exige nome completo, CPF, telefone e e-mail.
 - **RN34:** o e-mail normalizado deve ser único e será o identificador usado no login.
 - **RN35:** o login não utilizará senha; um código de confirmação será enviado ao e-mail informado.
 - **RN36:** o código deve conter exatamente seis dígitos e expirar cinco minutos após sua emissão.
@@ -72,5 +72,5 @@
 - **RN47:** `CustomerId` deve referenciar um usuário ativo com papel `Customer` ou `Employee`.
 - **RN48:** um usuário com papel `Customer`, mas sem papel `Employee`, não pode ser o profissional de um agendamento.
 - **RN49:** um usuário com papel `Employee` pode ser o cliente ou o profissional de um agendamento, mas `CustomerId` e `EmployeeId` não podem ter o mesmo valor no mesmo agendamento.
-- **RN50:** `Cpf` é obrigatório e único para usuários com papel `Employee`; para os demais usuários, é opcional.
+- **RN50:** `Cpf` é obrigatório e único para todos os usuários.
 

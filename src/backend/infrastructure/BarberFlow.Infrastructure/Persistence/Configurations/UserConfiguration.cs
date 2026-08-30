@@ -30,8 +30,9 @@ internal sealed class UserConfiguration : EntityConfiguration<User>
 
         builder.Property(user => user.Cpf)
             .HasColumnName("cpf")
-            .HasConversion(cpf => cpf!.Value, value => new Cpf(value))
-            .HasMaxLength(11);
+            .HasConversion(cpf => cpf.Value, value => new Cpf(value))
+            .HasMaxLength(11)
+            .IsRequired();
 
         builder.Property(user => user.IsActive)
             .HasColumnName("is_active")
@@ -43,7 +44,6 @@ internal sealed class UserConfiguration : EntityConfiguration<User>
 
         builder.HasIndex(user => user.Cpf)
             .IsUnique()
-            .HasFilter("cpf IS NOT NULL")
             .HasDatabaseName("ux_users_cpf");
     }
 }

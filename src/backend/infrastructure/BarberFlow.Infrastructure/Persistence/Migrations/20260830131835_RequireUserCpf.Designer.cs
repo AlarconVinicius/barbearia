@@ -3,6 +3,7 @@ using System;
 using BarberFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BarberFlow.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BarberFlowDbContext))]
-    partial class BarberFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260830131835_RequireUserCpf")]
+    partial class RequireUserCpf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

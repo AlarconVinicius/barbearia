@@ -6,7 +6,7 @@
 
 O sistema deve implementar autenticação própria e permitir registro e login sem senha usando o e-mail e um código de confirmação enviado por e-mail.
 
-No registro, o cliente deve informar nome completo, telefone e e-mail. O e-mail será usado como identificador de acesso.
+No registro, o cliente deve informar nome completo, CPF, telefone e e-mail. O e-mail será usado como identificador de acesso.
 
 O código de confirmação deve:
 

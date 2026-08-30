@@ -41,14 +41,14 @@ Representa a identidade autenticável e os dados comuns de clientes, funcionári
 | `FullName` | `string` | Sim | Nome completo |
 | `Email` | `string` | Sim | E-mail normalizado e único |
 | `PhoneNumber` | `string` | Sim | Telefone de contato informado no registro |
-| `Cpf` | `string?` | Condicional | CPF normalizado com 11 dígitos; obrigatório para `Employee` |
+| `Cpf` | `string` | Sim | CPF normalizado com 11 dígitos e único |
 | `IsActive` | `bool` | Sim | Indica se o usuário pode acessar o sistema |
 | `CreatedAtUtc` | `DateTimeOffset` | Sim | Data de criação |
 | `UpdatedAtUtc` | `DateTimeOffset?` | Não | Data da última alteração |
 
 Os papéis iniciais serão `Administrator`, `Employee` e `Customer`. A autenticação, a confirmação do e-mail e a emissão da credencial de acesso serão implementadas pela aplicação.
 
-`Cpf` será nulo para clientes que não o informarem. Antes de atribuir o papel `Employee`, a aplicação deverá exigir e validar o CPF. O banco aplicará unicidade somente aos CPFs preenchidos, preferencialmente por índice único parcial.
+`Cpf` será obrigatório para todos os usuários. A aplicação deverá validá-lo no cadastro, e o banco aplicará sua unicidade.
 
 ## UserRole
 

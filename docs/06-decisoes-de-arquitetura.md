@@ -162,7 +162,7 @@ Clientes, funcionários e administradores serão armazenados em uma única entid
 
 Um usuário com papel `Employee` poderá ser profissional em alguns agendamentos e cliente em outros, sem precisar receber também o papel `Customer`. Entretanto, ele não poderá ser simultaneamente cliente e profissional no mesmo agendamento. Um usuário que possua somente o papel `Customer` nunca poderá ocupar o campo de profissional.
 
-O CPF será uma propriedade opcional de `User` no banco de dados, mas será obrigatório pela regra de domínio sempre que o usuário possuir o papel `Employee`. A unicidade será aplicada aos CPFs preenchidos.
+O CPF será uma propriedade obrigatória e única de `User`, independentemente dos papéis atribuídos ao usuário.
 
 ## DA14 — Estrutura da solution e dependências
 

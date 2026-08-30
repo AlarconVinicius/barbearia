@@ -13,13 +13,13 @@ public sealed class User : Entity
         string fullName,
         Email email,
         PhoneNumber phoneNumber,
-        Cpf? cpf = null)
+        Cpf cpf)
         : base()
     {
         FullName = DomainGuard.Required(fullName, nameof(fullName));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-        Cpf = cpf;
+        Cpf = cpf ?? throw new ArgumentNullException(nameof(cpf));
         IsActive = true;
     }
 
@@ -29,7 +29,7 @@ public sealed class User : Entity
 
     public PhoneNumber PhoneNumber { get; private set; } = null!;
 
-    public Cpf? Cpf { get; private set; }
+    public Cpf Cpf { get; private set; } = null!;
 
     public bool IsActive { get; private set; }
 
@@ -37,12 +37,12 @@ public sealed class User : Entity
         string fullName,
         Email email,
         PhoneNumber phoneNumber,
-        Cpf? cpf)
+        Cpf cpf)
     {
         FullName = DomainGuard.Required(fullName, nameof(fullName));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-        Cpf = cpf;
+        Cpf = cpf ?? throw new ArgumentNullException(nameof(cpf));
         MarkAsUpdated();
     }
 
