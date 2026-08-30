@@ -1,11 +1,14 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+using BarberFlow.Infrastructure;
+using BarberFlow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+await app.Services.ApplyPendingMigrationsAsync();
 
 if (app.Environment.IsDevelopment())
 {
@@ -14,4 +17,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.Run();
+await app.RunAsync();
